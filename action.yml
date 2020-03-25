@@ -2,7 +2,7 @@ name: 'clean-commit'
 description: 'Github action to prevent the user from writing bad git commit message'
 inputs:
   repo-token:
-    description: 'Token for the repository. This can be passed using {{ secrets.GITHUB_TOKEN }}
+    description: 'Token for the repository. This can be passed using {{ secrets.GITHUB_TOKEN }}'
     required: true
 runs:
   using: 'node12'
