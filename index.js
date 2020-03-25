@@ -17,7 +17,6 @@ function filterCommit(commit) {
 
 async function verifyCommits(repoToken) {
   const client = new GitHub(repoToken);
-  debug(`context is ${JSON.stringify(context.issue, null, 2)}`);
   const { data: commits } = await client.pulls.listCommits({ owner: context.repo.owner, repo: context.repo.repo, pull_number: context.issue.number})
   debug(`There are ${commits.length} commits in this pr`);
 
@@ -36,11 +35,11 @@ async function verifyCommits(repoToken) {
 
     const badKeywords = filterCommit(message);
     if (badKeywords.length) {
-      errors.push(`${message} contains ${badKeywords.join()}`);
+      errors.push(`commit message \"${message}\" contains ${badKeywords.join()}`);
     }
   }
   if (errors.length) {
-    throw Error(errors);
+    throw Error(errors.join('\n'));
   }
 }
 async function main() {
