@@ -18,7 +18,7 @@ function filterCommit(commit) {
 async function verifyCommits(repoToken) {
   const client = new GitHub(repoToken);
   const { data: commits } = client.pulls.listCommits({ owner: context.repo.repo, repo: context.repo.repo, pull_number: context.issue.number})
-  debug(`There are ${commits.length} commits`);
+  debug(`There are ${commits.length} commits in this pr`);
 
   let errors = [];
   for (const commit of commits) {
