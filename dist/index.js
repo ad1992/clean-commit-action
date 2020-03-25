@@ -5320,9 +5320,9 @@ function filterCommit(commit) {
 async function verifyCommits(repoToken) {
   const client = new GitHub(repoToken);
   debug(`context is ${JSON.stringify(context.issue, null, 2)}`);
-  const res = client.pulls.listCommits({ owner: context.repo.owner, repo: context.repo.repo, pull_number: context.issue.number});
+  const res = await client.pulls.listCommits({ owner: context.repo.owner, repo: context.repo.repo, pull_number: context.issue.number});
   debug(res);
-  const { data: commits } = client.pulls.listCommits({ owner: context.repo.owner, repo: context.repo.repo, pull_number: context.issue.number})
+  const { data: commits } = await client.pulls.listCommits({ owner: context.repo.owner, repo: context.repo.repo, pull_number: context.issue.number})
   debug(`There are ${commits.length} commits in this pr`);
 
   let errors = [];
