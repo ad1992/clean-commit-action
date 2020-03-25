@@ -5300,7 +5300,7 @@ module.exports = function(fn) {
 /***/ 557:
 /***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
 
-const { getInput, setFailed, debug } = __webpack_require__(674);
+const { getInput, setFailed, debug, error } = __webpack_require__(674);
 const { GitHub, context } = __webpack_require__(205);
 
 const { BAD_KEYWORDS, MIN_COMMIT_MESSAGE_LENGTH } = __webpack_require__(481);
@@ -5319,29 +5319,37 @@ function filterCommit(commit) {
 
 async function verifyCommits(repoToken) {
   const client = new GitHub(repoToken);
-  const { data: commits } = client.pulls.listCommits({ owner: context.repo.repo, repo: context.repo.repo, pull_number: context.issue.number})
-  debug(`There are ${commits.length} commits`);
+  const { data: commits } = await client.pulls.listCommits({ owner: context.repo.owner, repo: context.repo.repo, pull_number: context.issue.number})
+  debug(`There are ${commits.length} commits in this pr`);
 
-  let errors = [];
+  let badCommits = 0;
+  let isCommitBad = false;
   for (const commit of commits) {
     const { message } = commit.commit;
-    debug(message);
 
     if (message.length < MIN_COMMIT_MESSAGE_LENGTH) {
-      errors.push(`${message} has less than ${MIN_COMMIT_MESSAGE_LENGTH} characters`);
+      error(`commit message \"${message}\" has less than ${MIN_COMMIT_MESSAGE_LENGTH} characters`);
+      isCommitBad = true;
     }
 
     if (message[0] !== message[0].toUpperCase()) {
-      errors.push(`${message} should have first letter in upper case`);
+      error(`commit message \"${message}\" should have first letter in upper case`);
+      isCommitBad = true;
     }
 
     const badKeywords = filterCommit(message);
     if (badKeywords.length) {
-      errors.push(`${message} contains ${badKeywords.join()}`);
+      error(`commit message \"${message}\" contains ${badKeywords.join()}`);
+      isCommitBad = true;
+    }
+
+    if(isCommitBad) {
+      badCommits++;
+      isCommitBad = false;
     }
   }
-  if (errors.length) {
-    throw Error(errors);
+  if (badCommits) {
+    throw Error(`${badCommits} have been encountered. Please fix the above errors`);
   }
 }
 async function main() {
