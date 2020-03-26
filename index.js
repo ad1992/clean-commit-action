@@ -30,11 +30,6 @@ async function verifyCommits(repoToken) {
       isCommitBad = true;
     }
 
-    if (message[0] !== message[0].toUpperCase()) {
-      error(`commit message \"${message}\" should have first letter in upper case`);
-      isCommitBad = true;
-    }
-
     const badKeywords = filterCommit(message);
     if (badKeywords.length) {
       error(`commit message \"${message}\" contains ${badKeywords.join()}`);
@@ -47,7 +42,7 @@ async function verifyCommits(repoToken) {
     }
   }
   if (badCommits) {
-    throw Error(`${badCommits} have been encountered. Please fix the above errors`);
+    throw Error(`${badCommits} bad commit(s) encountered. Please fix the above errors`);
   }
 }
 async function main() {
@@ -56,7 +51,7 @@ async function main() {
     await verifyCommits(repoToken);
     debug('Recieved repo token');
   } catch (e) {
-    setFailed(`Action failed with error ${e.message}`);
+    setFailed(`Action failed with error: ${e.message}`);
   }
 }
 
