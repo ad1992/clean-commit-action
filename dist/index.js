@@ -4908,7 +4908,7 @@ module.exports = parse;
 /***/ 481:
 /***/ (function(module) {
 
-const BAD_KEYWORDS = ['temp', 'tmp', 'fixup', 'squash', 'wip'];
+const BAD_KEYWORDS = ['temp', 'tmp', 'fixup', 'squash', 'wip', 'review fix', 'bug fix'];
 const MIN_COMMIT_MESSAGE_LENGTH = 10;
 module.exports = { BAD_KEYWORDS, MIN_COMMIT_MESSAGE_LENGTH };
 
@@ -5351,7 +5351,7 @@ async function main() {
   try {
     const repoToken = getInput('repo-token', { required: true });
     await verifyCommits(repoToken);
-    debug('Recieved repo token');
+    debug('Received repo token');
   } catch (e) {
     setFailed(`Action failed with error: ${e.message}`);
   }
