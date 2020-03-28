@@ -49,7 +49,7 @@ async function main() {
   try {
     const repoToken = getInput('repo-token', { required: true });
     await verifyCommits(repoToken);
-    debug('Recieved repo token');
+    debug('Received repo token');
   } catch (e) {
     setFailed(`Action failed with error: ${e.message}`);
   }
