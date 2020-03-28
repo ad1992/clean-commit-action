@@ -1,3 +1,5 @@
+![Pull request](https://github.com/ad1992/clean-commit-action/workflows/Pull%20request/badge.svg)
+
 # [WIP] clean-commit-action
  Clean-commit-action is a simple action to prevent bad git commit messages.
 
